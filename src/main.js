@@ -10,11 +10,8 @@ window.addEventListener("load", function(){
 
     gameManager.componentAdd(new Player(gameManager, 0, 100));
     gameManager.componentAdd(new Player(gameManager, 100, 300));
-    const p2 = gameManager.componentAdd(new Player(gameManager, 300, 100));
+    gameManager.componentAdd(new Player(gameManager, 300, 100));
     gameManager.componentAdd(new Player(gameManager, 400, 100));
-    gameManager.componentRemove(p2);
-
-    console.log(gameManager.components);
     
     gameManager.update();
 });
