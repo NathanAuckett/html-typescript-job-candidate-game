@@ -61,7 +61,17 @@ export class GameManager {
 
     componentAdd(component){
         this.components.push(component);
-        return component.id;
+        return component;
+    }
+
+    componentGetInstancesOf(componentClass){
+        const results = [];
+        for (const comp of this.components){
+            if (comp instanceof componentClass){
+                results.push(comp);
+            }
+        }
+        return results;
     }
 
     componentRemove(componentID){

@@ -1,6 +1,6 @@
 export class Component {
     constructor(gameManager) {
-        this.game = gameManager;
+        this.gameManager = gameManager;
         this.id = gameManager.giveID();
         this.ctx = gameManager.ctx;
         this.x = 0;
@@ -9,9 +9,7 @@ export class Component {
         this.height = 10;
     }
 
-    step(){
-
-    }
+    step(){}
 
     draw(){
         this.ctx.fillRect(this.x, this.y, this.width, this.height);

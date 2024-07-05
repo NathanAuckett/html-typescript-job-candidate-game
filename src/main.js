@@ -9,9 +9,7 @@ window.addEventListener("load", function(){
     const gameManager = new GameManager(canvas);
 
     gameManager.componentAdd(new Player(gameManager, 0, 100));
-    gameManager.componentAdd(new Player(gameManager, 100, 300));
-    gameManager.componentAdd(new Player(gameManager, 300, 100));
-    gameManager.componentAdd(new Player(gameManager, 400, 100));
+    gameManager.componentAdd(new Player(gameManager, 0, 300));
     
     gameManager.update();
 });

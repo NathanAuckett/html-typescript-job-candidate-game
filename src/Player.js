@@ -1,10 +1,10 @@
 import { Component } from "./Component.js";
-
 import { InputManager } from "./InputManager.js";
+import { Collider } from "./Collider.js";
 
 export class Player extends Component {
-    constructor(game, x, y) {
-        super(game);
+    constructor(gameManager, x, y) {
+        super(gameManager);
         this.x = x;
         this.y = y;
         this.width = 100;
@@ -18,22 +18,31 @@ export class Player extends Component {
         this.grounded = false;
 
         this.inputManager = new InputManager();
+        this.collider = gameManager.componentAdd(new Collider(gameManager, this.x, this.y, this.width, this.height));
     }
 
     step(){
-        if (!this.grounded){
+        if (!this.grounded){ // In Air
             this.vspd += this.grav;
 
-            if (this.y + this.vspd >= this.game.height - this.height){
-                this.y = this.game.height - this.height;
+            if (this.y + this.vspd >= this.gameManager.height - this.height){
+                this.y = this.gameManager.height - this.height;
                 this.vspd = 0;
                 this.grounded = true;
             }
         }
-        else{
+        else{ // On ground
             if (this.inputManager.check(" ")){
                 this.vspd = -this.jumpPower;
                 this.grounded = false;
+            }
+        }
+
+        //Collision check
+        const players = this.gameManager.componentGetInstancesOf(Player);
+        for (const player of players){
+            if (player.id != this.id && this.collider.collide(player.collider, this.x, this.y)){
+                console.log("Collision!");
             }
         }
 
