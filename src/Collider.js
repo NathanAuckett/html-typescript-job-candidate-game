@@ -28,7 +28,7 @@ export class Collider extends Component {
 
     draw(){
         if (this.drawDebug){
-            this.ctx.fillStyle = "rgba(0, 255, 0, 0.1)";
+            this.ctx.fillStyle = "rgba(0, 255, 0, 0.5)";
             this.ctx.fillRect(this.x, this.y, this.width, this.height);
         }
     }

@@ -3,13 +3,12 @@ import { Player } from "./Player.js";
 
 window.addEventListener("load", function(){
     const canvas = document.getElementById("canvas");
-    canvas.width = 500;
+    canvas.width = 800;
     canvas.height = 500;
 
     const gameManager = new GameManager(canvas);
 
-    gameManager.componentAdd(new Player(gameManager, 0, 100));
-    gameManager.componentAdd(new Player(gameManager, 0, 300));
+    gameManager.componentAdd(new Player(gameManager, canvas.width / 2 - 50, canvas.height - 100));
     
     gameManager.update();
 });

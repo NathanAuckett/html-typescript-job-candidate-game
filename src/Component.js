@@ -1,7 +1,7 @@
 export class Component {
     constructor(gameManager) {
         this.gameManager = gameManager;
-        this.id = gameManager.giveID();
+        this.id = gameManager.getNewID();
         this.ctx = gameManager.ctx;
         this.x = 0;
         this.y = 0;

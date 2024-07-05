@@ -8,62 +8,54 @@ export class GameManager {
         this.components = [];
 
         //Limit game fps
-        this.fpsLimit = 120;
+        this.fpsLimit = 60;
         this.frameExpectedMs = 1000 / this.fpsLimit;
         this.frameTimeCurrent = window.performance.now();
         this.frameTimeLast = this.frameTimeCurrent;
-        
-        //Track browser FPS
-        this.frameCounter = 0;
-        this.fpsTrackCurrent = window.performance.now();
-        this.fpsTrackLast = this.fpsTrackCurrent;
-        this.fps = 0;
     }
 
+    //Run component step logic
     step(){
         for (const comp of this.components){
             comp.step();
         }
     }
 
+    //Run component draw logic
     draw(){
         for (const comp of this.components){
             comp.draw();
         }
     }
 
+    //Run game update loop
     update(){
-        //Track browser fps
-        this.frameCounter ++;
-        //console.log(this.frameCounter);
-        if (window.performance.now() - this.fpsTrackLast >= 1000){
-            this.fps = this.frameCounter;
-            this.frameCounter = 0;
-            this.fpsTrackLast = window.performance.now();
-        }
+        this.frameTimeCurrent = performance.now();
+        const elapsedTime = this.frameTimeCurrent - this.frameTimeLast;
         
-        //Update game at max fps
-        this.frameTimeCurrent = window.performance.now();
-        if (this.frameTimeCurrent - this.frameTimeLast >= this.frameExpectedMs){
+        if (elapsedTime >= this.frameExpectedMs){
             this.ctx.clearRect(0, 0, canvas.width, canvas.height);
             this.step();
             this.draw();
-            this.frameTimeLast = this.frameTimeCurrent;
+            this.frameTimeLast = this.frameTimeCurrent - (elapsedTime % this.frameExpectedMs);
         }
         
         requestAnimationFrame(() => {this.update()});
     }
 
-    giveID(){
+    //Gives a new id and increments id counter
+    getNewID(){
         this.componentIDCount ++;
         return this.componentIDCount;
     }
 
+    //Adds a new component to the game manager
     componentAdd(component){
         this.components.push(component);
         return component;
     }
 
+    //Gets array of all components that are instances of X class
     componentGetInstancesOf(componentClass){
         const results = [];
         for (const comp of this.components){
@@ -74,6 +66,7 @@ export class GameManager {
         return results;
     }
 
+    //Removes a compnent from the game manager
     componentRemove(componentID){
         if (this.components.length > 2){ //Binary search
             let minI = 0;
@@ -98,7 +91,7 @@ export class GameManager {
             this.components.splice(currentI, 1);
             return true
         }
-        else if (this.components.length == 2){
+        else if (this.components.length == 2){ //only 2 components, one or the other
             if (this.components[0].id === componentID){
                 this.components.splice(0, 1);
                 return true
@@ -109,14 +102,14 @@ export class GameManager {
             }
             return false
         }
-        else if (this.components.length == 1){
+        else if (this.components.length == 1){ //single component
             if (this.components[0].id === componentID){
                 this.components.splice(0, 1);
                 return true
             }
             return false
         }
-        else{
+        else{ //there are no components
             console.log("Failed to remove component as components array is empty");
             return false
         }
