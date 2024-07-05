@@ -13,9 +13,16 @@ export class Parachuter extends Component{
 
         this.vspd = 0;
         this.hspd = 0;
-        this.grav = 0.01;
-        this.maxFallSpd = 1.5;
-        this.sway = 0;
+
+        this.grav = 0.05;
+        this.fallSpdMin = 1;
+        this.fallSpdMax = 2.5;
+        this.maxFallSpd = this.fallSpdMin + this.fallSpdMax - this.fallSpdMax * Math.random();
+
+        this.swayRangeMin = 16;
+        this.swayRangeMax = 64;
+        this.swayRange = this.swayRangeMin + this.swayRangeMax - this.swayRangeMax * Math.random();
+        this.sway = 360 * Math.random();
         this.swaySpd = 0.02;
 
         this.active = true;
@@ -29,6 +36,9 @@ export class Parachuter extends Component{
         this.y = y;
         this.vspd = 0;
         this.hspd = 0;
+        this.sway = 360 * Math.random();
+        this.swayRange = this.swayRangeMin + this.swayRangeMax - this.swayRangeMax * Math.random();
+        this.maxFallSpd = this.fallSpdMin + this.fallSpdMax - this.fallSpdMax * Math.random();
         this.collider.setPosition(this.x, this.y);
         this.active = true;
     }
@@ -44,7 +54,7 @@ export class Parachuter extends Component{
 
             this.sway += this.swaySpd;
             this.sway = this.sway % 360;
-            this.x = this.xStart + 32 * Math.sin(this.sway);
+            this.x = this.xStart + this.swayRange * Math.sin(this.sway);
 
             this.y += this.vspd;
 

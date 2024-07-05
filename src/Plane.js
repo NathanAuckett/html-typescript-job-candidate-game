@@ -11,13 +11,14 @@ export class Plane extends Component {
 
         this.spd = 2;
 
-        this.parachutersMax = 5;
+        this.parachutersMax = 10;
         this.parachutersPool = [];
 
-        this.dropFrequency = 2500;
+        this.dropFrequencyMin = 200;
+        this.dropFrequencyMax = 2500;
 
         this.dropLogic = function(){
-            if (this.x > this.width * 0.75 && this.x < this.gameManager.width - this.width * 0.75){
+            if (this.x > this.width && this.x < this.gameManager.width - this.width){
                 if (this.parachutersPool.length < this.parachutersMax){
                     this.parachutersPool.push(gameManager.componentAdd(new Parachuter(gameManager, this.x + this.width / 2, this.y + this.height)));
                 }
@@ -29,16 +30,16 @@ export class Plane extends Component {
                         }
                     }
                 }
-                this.dropInterval = setTimeout(() => {this.dropLogic()}, this.dropFrequency);
+                this.dropInterval = setTimeout(() => {this.dropLogic()}, this.dropFrequencyMax - this.dropFrequencyMin * Math.random());
             }
             else{
-                this.dropInterval = setTimeout(() => {this.dropLogic()}, 1000 * Math.random());
+                this.dropInterval = setTimeout(() => {this.dropLogic()}, 500 * Math.random());
             }
         }
 
         setTimeout(() => {
             this.dropLogic();
-        }, this.dropFrequency);
+        }, this.dropFrequencyMin + this.dropFrequencyMax - this.dropFrequencyMax * Math.random());
     }
 
     step(){
