@@ -29,6 +29,7 @@ export class Parachuter extends Component{
         this.y = y;
         this.vspd = 0;
         this.hspd = 0;
+        this.collider.setPosition(this.x, this.y);
         this.active = true;
     }
 
