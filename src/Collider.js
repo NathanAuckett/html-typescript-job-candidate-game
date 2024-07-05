@@ -4,9 +4,16 @@ export class Collider extends Component {
     constructor(gameManager, x, y, width, height){
         super(gameManager);
         this.gameManager = gameManager;
+        this.x = x;
+        this.y = y;
         this.width = width;
         this.height = height;
-        this.drawDebug = true;
+        this.drawDebug = false;
+    }
+
+    setPosition(x, y){
+        this.x = x;
+        this.y = y;
     }
 
     collide(otherCollider, x = this.x, y = this.y){
@@ -16,8 +23,8 @@ export class Collider extends Component {
             return !(
                 this.x + this.width < otherCollider.x ||
                 this.x > otherCollider.x + otherCollider.width ||
-                this.y + this.y < otherCollider.y ||
-                this.y > otherCollider.y + otherCollider.width
+                this.y + this.height < otherCollider.y ||
+                this.y > otherCollider.y + otherCollider.height
             );
         }
         else{

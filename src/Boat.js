@@ -1,18 +1,19 @@
 import { Component } from "./Component.js";
 import { InputManager } from "./InputManager.js";
 import { Collider } from "./Collider.js";
+import { Parachuter } from "./Parachuter.js";
 
-export class Player extends Component {
+export class Boat extends Component {
     constructor(gameManager, x, y) {
         super(gameManager);
         this.x = x;
         this.y = y;
-        this.width = 100;
-        this.height = 100;
+        this.width = 128;
+        this.height = 32;
 
         this.hspd = 0;
         this.vspd = 0;
-        this.accel = 0.2;
+        this.accel = 0.15;
         this.maxSpd = 10;
 
         this.grounded = false;
@@ -22,6 +23,7 @@ export class Player extends Component {
     }
 
     step(){
+        //Control
         const dir = this.inputManager.check("ArrowRight") - this.inputManager.check("ArrowLeft");
         this.hspd += this.accel * dir;
         if (this.hspd > this.maxSpd){
@@ -30,7 +32,7 @@ export class Player extends Component {
         if (this.hspd < -this.maxSpd){
             this.hspd = -this.maxSpd;
         }
-
+        //Deceleration
         if (dir == 0){
             if (this.hspd > 0){
                 this.hspd -= this.accel;
@@ -46,6 +48,7 @@ export class Player extends Component {
             }
         }
 
+        //Prevent leaving edges of canvas
         if (this.x + this.hspd < 0){
             this.x = 0;
             this.hspd = 0;
@@ -58,13 +61,14 @@ export class Player extends Component {
         this.x += this.hspd;
         this.y += this.vspd;
 
-        //Collision check
-        // const players = this.gameManager.componentGetInstancesOf(Player);
-        // for (const player of players){
-        //     if (player.id != this.id && this.collider.collide(player.collider, this.x, this.y)){
-        //         console.log("Collision!");
-        //     }
-        // }
+        //Collision check with parachuters
+        const parachuters = this.gameManager.plane.parachutersPool;
+        for (const parachuter of parachuters){
+            if (parachuter.active && this.collider.collide(parachuter.collider, this.x, this.y)){
+                parachuter.active = false;
+                this.gameManager.scoreKeeper.score ++;
+            }
+        }
     }
 
     draw(){

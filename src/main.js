@@ -1,5 +1,8 @@
 import { GameManager } from "./GameManager.js";
-import { Player } from "./Player.js";
+import { Boat } from "./Boat.js";
+import { Plane } from "./Plane.js";
+import { Water } from "./Water.js";
+import { ScoreKeeper } from "./ScoreKeeper.js";
 
 window.addEventListener("load", function(){
     const canvas = document.getElementById("canvas");
@@ -8,7 +11,10 @@ window.addEventListener("load", function(){
 
     const gameManager = new GameManager(canvas);
 
-    gameManager.componentAdd(new Player(gameManager, canvas.width / 2 - 50, canvas.height - 100));
+    gameManager.water = gameManager.componentAdd(new Water(gameManager));
+    gameManager.componentAdd(new Boat(gameManager, canvas.width / 2 - 50, canvas.height - 48));
+    gameManager.plane = gameManager.componentAdd(new Plane(gameManager, canvas.width - 200, 32));
+    gameManager.scoreKeeper = gameManager.componentAdd(new ScoreKeeper(gameManager));
     
     gameManager.update();
 });
