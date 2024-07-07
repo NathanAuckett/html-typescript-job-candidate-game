@@ -2,6 +2,9 @@ import { Component } from "../engine/Component.js";
 import { Collider } from "../engine/components/Collider.js";
 import { Sprite } from "../engine/components/Sprite.js";
 import { GameManager } from "../engine/GameManager.js";
+import { Boat } from "./Boat.js";
+import { GameOver } from "./GameOver.js";
+import { Plane } from "./Plane.js";
 import { ScoreKeeper } from "./ScoreKeeper.js";
 import { Water } from "./Water.js";
 
@@ -34,7 +37,16 @@ export class Parachuter extends Component{
         this.width = this.spriteElement.width * this.spriteScale;
         this.height = this.spriteElement.height * this.spriteScale;
 
-        this.sprite = new Sprite(gameManager, this.spriteElement, this.x, this.y, this.spriteElement.width, this.spriteElement.height, this.spriteScale, this.spriteScale);
+        this.sprite = new Sprite(
+			gameManager,
+			this.spriteElement,
+			this.x,
+			this.y,
+			this.spriteElement.width,
+			this.spriteElement.height,
+			this.spriteScale,
+			this.spriteScale
+		);
         this.collider = new Collider(gameManager, this.x, this.y, this.width, this.height);
 
         gameManager.componentAdd(this.sprite);
@@ -78,6 +90,16 @@ export class Parachuter extends Component{
                 this.sprite.visible = false;
                 const scoreKeeper = this.gameManager.componentGetNamed("scoreKeeper") as ScoreKeeper;
                 scoreKeeper.lives --;
+                //Game Over
+                if (scoreKeeper.lives < 0){
+                    scoreKeeper.lives = 0; //Don't draw -1 to the screen
+                    const gameOverUI = this.gameManager.componentGetNamed("gameOver") as GameOver;
+                    gameOverUI.gameOver = true;
+                    const boat = this.gameManager.componentGetNamed("boat") as Boat;
+                    boat.gameOver = true;
+                    const plane = this.gameManager.componentGetNamed("plane") as Plane;
+                    plane.gameOver = true;
+                }
             }
 
             this.sprite.setPosition(this.x, this.y);

@@ -6,7 +6,8 @@ export class Plane extends Component {
     spriteElement = document.getElementById("plane");
     spriteScale = 0.5;
     spd = 2;
-    parachutersMax = 10;
+    gameOver = false;
+    parachutersMax = 5;
     parachutersPool = [];
     dropFrequencyMin = 200;
     dropFrequencyMax = 2000;
@@ -18,6 +19,7 @@ export class Plane extends Component {
         this.height = this.spriteElement.height * this.spriteScale - 40;
         this.sprite = new Sprite(gameManager, this.spriteElement, this.x, this.y, this.spriteElement.width, this.spriteElement.height, this.spriteScale, this.spriteScale);
         gameManager.componentAdd(this.sprite);
+        this.fillParachuterPool();
         setTimeout(() => {
             this.dropLogic();
         }, this.dropFrequencyMin + this.dropFrequencyMax - this.dropFrequencyMax * Math.random());
@@ -25,29 +27,37 @@ export class Plane extends Component {
     step() {
         this.x -= this.spd;
         if (this.x < -this.width) {
-            this.x = this.gameManager.width + 200;
+            if (!this.gameOver) {
+                this.x = this.gameManager.width + 200;
+            }
         }
         this.sprite.setPosition(this.x, this.y);
     }
     dropLogic() {
-        if (this.x > this.width * 2 && this.x < this.gameManager.width - this.width * 2) {
-            if (this.parachutersPool.length < this.parachutersMax) {
-                const parachuter = new Parachuter(this.gameManager, this.x + this.width / 2, this.y + this.height);
-                this.gameManager.componentAdd(parachuter);
-                this.parachutersPool.push(parachuter);
-            }
-            else {
+        if (!this.gameOver) {
+            if (this.x > this.width * 2 && this.x < this.gameManager.width - this.width * 2) {
                 for (const parachuter of this.parachutersPool) {
                     if (!parachuter.active) {
                         parachuter.reset(this.x + this.width / 2, this.y + this.height);
                         break;
                     }
                 }
+                setTimeout(() => { this.dropLogic(); }, this.dropFrequencyMax - this.dropFrequencyMin * Math.random());
             }
-            setTimeout(() => { this.dropLogic(); }, this.dropFrequencyMax - this.dropFrequencyMin * Math.random());
+            else {
+                setTimeout(() => { this.dropLogic(); }, 500 * Math.random());
+            }
         }
         else {
-            setTimeout(() => { this.dropLogic(); }, 500 * Math.random());
+            setTimeout(() => { this.dropLogic(); }, 2000); //awaiting restart
+        }
+    }
+    fillParachuterPool() {
+        for (let i = 0; i < this.parachutersMax; i++) {
+            const parachuter = new Parachuter(this.gameManager, 0, -200);
+            parachuter.active = false;
+            this.parachutersPool.push(parachuter);
+            this.gameManager.componentAdd(parachuter);
         }
     }
 }

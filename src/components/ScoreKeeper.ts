@@ -3,7 +3,8 @@ import { GameManager } from "../engine/GameManager.js";
 
 export class ScoreKeeper extends Component{
     score: number = 0;
-    lives: number = 0;
+    startingLives = 3;
+    lives: number = this.startingLives;
 
     constructor(gameManager: GameManager){
         super(gameManager);

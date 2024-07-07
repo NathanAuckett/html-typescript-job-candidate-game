@@ -61,6 +61,16 @@ export class Parachuter extends Component {
                 this.sprite.visible = false;
                 const scoreKeeper = this.gameManager.componentGetNamed("scoreKeeper");
                 scoreKeeper.lives--;
+                //Game Over
+                if (scoreKeeper.lives < 0) {
+                    scoreKeeper.lives = 0; //Don't draw -1 to the screen
+                    const gameOverUI = this.gameManager.componentGetNamed("gameOver");
+                    gameOverUI.gameOver = true;
+                    const boat = this.gameManager.componentGetNamed("boat");
+                    boat.gameOver = true;
+                    const plane = this.gameManager.componentGetNamed("plane");
+                    plane.gameOver = true;
+                }
             }
             this.sprite.setPosition(this.x, this.y);
         }

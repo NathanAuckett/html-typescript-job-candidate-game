@@ -5,6 +5,7 @@ import { Plane } from "./Plane.js";
 import { ScoreKeeper } from "./ScoreKeeper.js";
 import { Sprite } from "../engine/components/Sprite.js";
 import { GameManager } from "../engine/GameManager.js";
+import { GameOver } from "./GameOver.js";
 
 export class Boat extends Component {
     sprite: Sprite;
@@ -16,8 +17,9 @@ export class Boat extends Component {
     readonly accel: number = 0.3;
     readonly decel: number = 0.15;
     readonly maxSpd: number = 10;
-    mouseX: number = 0;
-    followMouse: boolean = false;
+    private mouseX: number = 0;
+    private followMouse: boolean = false;
+    gameOver: boolean = false;
 
     inputManager: InputManager;
     collider: Collider;
@@ -47,11 +49,31 @@ export class Boat extends Component {
     }
 
     step(){
+        let mouseDown = false;
+        let left = 0;
+        let right = 0;
+        
         //Control
-        const mouseDown = this.inputManager.check("mouse0");
-        const left = this.inputManager.check("ArrowLeft") == true ? 1 : 0;
-        const right = this.inputManager.check("ArrowRight") == true ? 1 : 0;
+        if (!this.gameOver){
+            mouseDown = this.inputManager.check("mouse0");
+            left = this.inputManager.check("ArrowLeft") == true ? 1 : 0;
+            right = this.inputManager.check("ArrowRight") == true ? 1 : 0;
+        }
+        else{
+            //Restart game
+            if (this.inputManager.check("r")){
+                const gameOverUI = this.gameManager.componentGetNamed("gameOver") as GameOver;
+                gameOverUI.gameOver = false;
+                const plane = this.gameManager.componentGetNamed("plane") as Plane;
+                plane.gameOver = false;
+                const scoreKeeper = this.gameManager.componentGetNamed("scoreKeeper") as ScoreKeeper;
+                scoreKeeper.score = 0;
+                scoreKeeper.lives = scoreKeeper.startingLives;
+                this.gameOver = false;
+            }
+        }
 
+        //Mouse control
         if (mouseDown){
             this.followMouse = true;
             this.mouseX = this.inputManager.getMouseMoveData().layerX;
@@ -60,11 +82,11 @@ export class Boat extends Component {
             this.followMouse = false;
         }
         
-        if (this.followMouse && Math.abs(this.mouseX - this.x - this.width / 2) > 0.1){
+        if (this.followMouse && Math.abs(this.mouseX - this.x - this.width / 2) > 0.1){ //Mouse control
             const dir = Math.sign(this.mouseX - this.x - this.width / 2);
             this.hspd = Math.min(this.maxSpd, Math.abs(this.mouseX - this.x - this.width / 2) * 0.025) * dir;
         }
-        else{
+        else{ //Keyboard control
             const dir = right - left;
 
             //Acceleration
@@ -75,7 +97,6 @@ export class Boat extends Component {
             if (this.hspd < -this.maxSpd){
                 this.hspd = -this.maxSpd;
             }
-        
 
             //Deceleration
             if (this.hspd > 0){

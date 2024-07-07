@@ -1,7 +1,8 @@
 import { Component } from "../engine/Component.js";
 export class ScoreKeeper extends Component {
     score = 0;
-    lives = 0;
+    startingLives = 3;
+    lives = this.startingLives;
     constructor(gameManager) {
         super(gameManager);
     }

@@ -13,6 +13,7 @@ export class Boat extends Component {
     maxSpd = 10;
     mouseX = 0;
     followMouse = false;
+    gameOver = false;
     inputManager;
     collider;
     constructor(gameManager, x, y) {
@@ -27,10 +28,29 @@ export class Boat extends Component {
         gameManager.componentAdd(this.collider);
     }
     step() {
+        let mouseDown = false;
+        let left = 0;
+        let right = 0;
         //Control
-        const mouseDown = this.inputManager.check("mouse0");
-        const left = this.inputManager.check("ArrowLeft") == true ? 1 : 0;
-        const right = this.inputManager.check("ArrowRight") == true ? 1 : 0;
+        if (!this.gameOver) {
+            mouseDown = this.inputManager.check("mouse0");
+            left = this.inputManager.check("ArrowLeft") == true ? 1 : 0;
+            right = this.inputManager.check("ArrowRight") == true ? 1 : 0;
+        }
+        else {
+            //Restart game
+            if (this.inputManager.check("r")) {
+                const gameOverUI = this.gameManager.componentGetNamed("gameOver");
+                gameOverUI.gameOver = false;
+                const plane = this.gameManager.componentGetNamed("plane");
+                plane.gameOver = false;
+                const scoreKeeper = this.gameManager.componentGetNamed("scoreKeeper");
+                scoreKeeper.score = 0;
+                scoreKeeper.lives = scoreKeeper.startingLives;
+                this.gameOver = false;
+            }
+        }
+        //Mouse control
         if (mouseDown) {
             this.followMouse = true;
             this.mouseX = this.inputManager.getMouseMoveData().layerX;
@@ -38,11 +58,11 @@ export class Boat extends Component {
         else if (left || right) {
             this.followMouse = false;
         }
-        if (this.followMouse && Math.abs(this.mouseX - this.x - this.width / 2) > 0.1) {
+        if (this.followMouse && Math.abs(this.mouseX - this.x - this.width / 2) > 0.1) { //Mouse control
             const dir = Math.sign(this.mouseX - this.x - this.width / 2);
             this.hspd = Math.min(this.maxSpd, Math.abs(this.mouseX - this.x - this.width / 2) * 0.025) * dir;
         }
-        else {
+        else { //Keyboard control
             const dir = right - left;
             //Acceleration
             this.hspd += this.accel * dir;

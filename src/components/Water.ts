@@ -19,9 +19,14 @@ export class Water extends Component{
         
         this.y = gameManager.height - this.height;
 
-        this.sprite = new Sprite(gameManager, this.spriteElement, this.x, this.y, this.spriteElement.width, this.spriteElement.height)
+        this.sprite = new Sprite(
+			gameManager,
+			this.spriteElement,
+			this.x,
+			this.y,
+			this.spriteElement.width,
+			this.spriteElement.height
+		);
         gameManager.componentAdd(this.sprite);
     }
-
-    draw(){}
 }
