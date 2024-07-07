@@ -3,15 +3,14 @@ import { GameManager } from "../GameManager.js";
 
 
 export class Sprite extends Component {
-    imagePath: string;
-    image: HTMLImageElement;
+    imageResource: CanvasImageSource;
     xScale: number;
     yScale: number;
     visible: boolean;
 
     constructor(
         gameManager: GameManager,
-        image: HTMLImageElement,
+        imageResource: CanvasImageSource,
         x: number,
         y: number,
         width: number | undefined = undefined,
@@ -21,7 +20,7 @@ export class Sprite extends Component {
         visible = true
     ){
         super(gameManager, x, y);
-        this.image = image;
+        this.imageResource = imageResource;
         this.width = width;
         this.height = height;
         this.xScale = xScale;
@@ -40,13 +39,13 @@ export class Sprite extends Component {
             this.y = y;
 
             if (this.xScale && this.yScale && this.width && this.height){
-                this.ctx.drawImage(this.image, this.x, this.y, this.width * this.xScale, this.height * this.yScale);
+                this.ctx.drawImage(this.imageResource, this.x, this.y, this.width * this.xScale, this.height * this.yScale);
             }
             else if (this.width && this.height){
-                this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+                this.ctx.drawImage(this.imageResource, this.x, this.y, this.width, this.height);
             }
             else{
-                this.ctx.drawImage(this.image, this.x, this.y);
+                this.ctx.drawImage(this.imageResource, this.x, this.y);
             }
         }
     }

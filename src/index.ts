@@ -12,8 +12,7 @@ window.addEventListener("load", function(){
 
     const gameManager = new GameManager(canvas);
 
-    const background = new Image();
-    background.src = "../resources/background.png";
+    const background = document.getElementById("background") as HTMLImageElement;
     gameManager.componentAdd(new Sprite(gameManager, background, 0, 0, background.width, background.height, canvas.width / background.width, canvas.height / background.height));
     const water = new Water(gameManager);
     gameManager.componentAdd(water, "water");

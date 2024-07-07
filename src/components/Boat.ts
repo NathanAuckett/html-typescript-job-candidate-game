@@ -8,6 +8,7 @@ import { GameManager } from "../engine/GameManager.js";
 
 export class Boat extends Component {
     sprite: Sprite;
+    spriteElement: HTMLImageElement = document.getElementById("boat") as HTMLImageElement;
     spriteScale: number = 0.5;
 
     hspd: number = 0;
@@ -24,22 +25,21 @@ export class Boat extends Component {
     constructor(gameManager: GameManager, x: number, y: number) {
         super(gameManager, x, y);
 
-        const image = new Image();
-        image.src = "../../resources/boat.png";
-        this.width = image.width * this.spriteScale;
-        this.height = image.height * this.spriteScale - 40;
+        this.width = this.spriteElement.width * this.spriteScale;
+        this.height = this.spriteElement.height * this.spriteScale - 40;
 
         this.sprite = new Sprite(
             gameManager, 
-            image,
+            this.spriteElement, 
             this.x, this.y, 
-            image.width, 
-            image.height, 
+            this.spriteElement.width, 
+            this.spriteElement.height, 
             this.spriteScale, 
             this.spriteScale
         );
+
         this.inputManager = new InputManager(gameManager);
-        this.collider = new Collider(gameManager, this.x, this.y, image.width * this.spriteScale - 10, this.height);
+        this.collider = new Collider(gameManager, this.x, this.y, this.spriteElement.width * this.spriteScale - 10, this.height);
 
         gameManager.componentAdd(this.sprite);
         gameManager.componentAdd(this.inputManager);

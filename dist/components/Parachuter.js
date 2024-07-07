@@ -3,13 +3,14 @@ import { Collider } from "../engine/components/Collider.js";
 import { Sprite } from "../engine/components/Sprite.js";
 export class Parachuter extends Component {
     sprite;
+    spriteElement = document.getElementById("parachuter");
     spriteScale = 0.5;
     xStart;
     vspd = 0;
     hspd = 0;
     grav = 0.05;
     fallSpdMin = 1;
-    fallSpdMax = 2.4;
+    fallSpdMax = 2.5;
     maxFallSpd = this.fallSpdMin + this.fallSpdMax - this.fallSpdMax * Math.random();
     swaySpd = 0.02;
     swayRangeMin = 16;
@@ -21,12 +22,10 @@ export class Parachuter extends Component {
     constructor(gameManager, x, y) {
         super(gameManager, x, y);
         this.xStart = x;
-        const image = new Image();
-        image.src = "../../resources/parachutist.png";
-        this.width = image.width * this.spriteScale;
-        this.height = image.height * this.spriteScale;
-        this.sprite = new Sprite(gameManager, image, this.x, this.y, image.width, image.height, this.spriteScale, this.spriteScale);
-        this.collider = new Collider(gameManager, this.x, this.y, this.width, this.height, false);
+        this.width = this.spriteElement.width * this.spriteScale;
+        this.height = this.spriteElement.height * this.spriteScale;
+        this.sprite = new Sprite(gameManager, this.spriteElement, this.x, this.y, this.spriteElement.width, this.spriteElement.height, this.spriteScale, this.spriteScale);
+        this.collider = new Collider(gameManager, this.x, this.y, this.width, this.height);
         gameManager.componentAdd(this.sprite);
         gameManager.componentAdd(this.collider);
     }
