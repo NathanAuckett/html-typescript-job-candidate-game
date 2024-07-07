@@ -9,20 +9,18 @@ export class Sprite extends Component {
     visible: boolean;
 
     constructor(
-        gameManager:GameManager,
+        gameManager: GameManager,
         imageResource: CanvasImageSource,
-        x:number,
-        y:number,
-        width:number | undefined = undefined,
-        height:number|undefined = undefined,
+        x: number,
+        y: number,
+        width: number | undefined = undefined,
+        height: number| undefined = undefined,
         xScale = 1,
         yScale = 1,
         visible = true
     ){
-        super(gameManager);
+        super(gameManager, x, y);
         this.imageResource = imageResource;
-        this.x = x;
-        this.y = y;
         this.width = width;
         this.height = height;
         this.xScale = xScale;
@@ -35,7 +33,7 @@ export class Sprite extends Component {
         this.y = y;
     }
 
-    draw(x = this.x, y = this.y){
+    draw(x: number = this.x, y: number = this.y){
         if (this.visible){
             this.x = x;
             this.y = y;

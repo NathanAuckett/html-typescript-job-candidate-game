@@ -3,22 +3,24 @@ export class Component {
     gameManager;
     id;
     ctx;
-    x;
-    y;
-    width;
-    height;
-    constructor(gameManager, name = "") {
+    x = 0;
+    y = 0;
+    width = 10;
+    height = 10;
+    drawDebug;
+    constructor(gameManager, x = this.x, y = this.y, name = "", drawDebug = false) {
+        this.x = x;
+        this.y = y;
         this.gameManager = gameManager;
         this.componentName = name;
         this.id = gameManager.getNewID();
         this.ctx = gameManager.ctx;
-        this.x = 0;
-        this.y = 0;
-        this.width = 10;
-        this.height = 10;
+        this.drawDebug = drawDebug;
     }
     step() { }
     draw() {
-        this.ctx.fillRect(this.x, this.y, this.width, this.height);
+        if (this.drawDebug) {
+            this.ctx.fillRect(this.x, this.y, this.width, this.height);
+        }
     }
 }

@@ -1,11 +1,11 @@
 import { Component } from "../Component.js";
+import { GameManager } from "../GameManager.js";
 
 export class InputManager extends Component{
-    keys: string[];
+    keys: string[] = [];
 
-    constructor(gameManager){
+    constructor(gameManager: GameManager){
         super(gameManager);
-        this.keys = [];
 
         window.addEventListener('keydown', (e) => {
             if (this.keys.indexOf(e.key) === -1){
@@ -24,6 +24,4 @@ export class InputManager extends Component{
     check(key: string){
         return this.keys.indexOf(key) > -1;
     }
-
-    draw(){} //override default draw
 }

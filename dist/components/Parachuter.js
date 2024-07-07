@@ -3,50 +3,36 @@ import { Collider } from "../engine/components/Collider.js";
 import { Sprite } from "../engine/components/Sprite.js";
 export class Parachuter extends Component {
     sprite;
-    spriteElement;
-    spriteScale;
+    spriteElement = document.getElementById("parachuter");
+    spriteScale = 0.5;
     xStart;
-    vspd;
-    hspd;
-    grav;
-    fallSpdMin;
-    fallSpdMax;
-    maxFallSpd;
-    swayRangeMin;
-    swayRangeMax;
-    swayRange;
-    sway;
-    swaySpd;
-    active;
+    vspd = 0;
+    hspd = 0;
+    grav = 0.05;
+    fallSpdMin = 1;
+    fallSpdMax = 2.5;
+    maxFallSpd = this.fallSpdMin + this.fallSpdMax - this.fallSpdMax * Math.random();
+    swaySpd = 0.02;
+    swayRangeMin = 16;
+    swayRangeMax = 64;
+    swayRange = this.swayRangeMin + this.swayRangeMax - this.swayRangeMax * Math.random();
+    sway = 360 * Math.random();
+    active = true;
     collider;
     constructor(gameManager, x, y) {
-        super(gameManager);
-        this.x = x;
-        this.y = y;
+        super(gameManager, x, y);
         this.xStart = x;
-        this.spriteElement = document.getElementById("parachuter");
-        this.spriteScale = 0.5;
         this.width = this.spriteElement.width * this.spriteScale;
         this.height = this.spriteElement.height * this.spriteScale;
-        this.sprite = gameManager.componentAdd(new Sprite(gameManager, this.spriteElement, this.x, this.y, this.spriteElement.width, this.spriteElement.height, this.spriteScale, this.spriteScale));
-        this.vspd = 0;
-        this.hspd = 0;
-        this.grav = 0.05;
-        this.fallSpdMin = 1;
-        this.fallSpdMax = 2.5;
-        this.maxFallSpd = this.fallSpdMin + this.fallSpdMax - this.fallSpdMax * Math.random();
-        this.swayRangeMin = 16;
-        this.swayRangeMax = 64;
-        this.swayRange = this.swayRangeMin + this.swayRangeMax - this.swayRangeMax * Math.random();
-        this.sway = 360 * Math.random();
-        this.swaySpd = 0.02;
-        this.active = true;
-        this.collider = gameManager.componentAdd(new Collider(gameManager, this.x, this.y, this.width, this.height));
+        this.sprite = new Sprite(gameManager, this.spriteElement, this.x, this.y, this.spriteElement.width, this.spriteElement.height, this.spriteScale, this.spriteScale);
+        this.collider = new Collider(gameManager, this.x, this.y, this.width, this.height);
+        gameManager.componentAdd(this.sprite);
+        gameManager.componentAdd(this.collider);
     }
     reset(x, y) {
         this.x = x;
-        this.xStart = x;
         this.y = y;
+        this.xStart = x;
         this.vspd = 0;
         this.hspd = 0;
         this.sway = 360 * Math.random();
@@ -78,11 +64,5 @@ export class Parachuter extends Component {
             }
             this.sprite.setPosition(this.x, this.y);
         }
-    }
-    draw() {
-        // if (this.active){
-        //     this.ctx.fillStyle = "green";
-        //     this.ctx.fillRect(this.x, this.y, this.width, this.height);
-        // }
     }
 }

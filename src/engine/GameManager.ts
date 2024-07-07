@@ -1,31 +1,23 @@
 import { Component } from "./Component.js";
 
 export class GameManager {
-    readonly width :number;
-    readonly height: number;
     readonly ctx: CanvasRenderingContext2D;
-    private componentIDCount: number;
-    readonly components: Component[];
-    readonly fpsLimit: number;
-    private frameExpectedMs: number;
-    private frameTimeCurrent: number;
-    private frameTimeLast: number;
-    private namedCompMap: Map<string, Component>;
+    readonly width: number;
+    readonly height: number;
 
-    constructor(canvas){
+    private componentIDCount: number = 0;
+    readonly components: Component[] = [];
+    private namedCompMap: Map<string, Component> = new Map<string, Component>();
+
+    readonly fpsLimit: number = 60;
+    private frameExpectedMs: number = 1000 / this.fpsLimit;
+    private frameTimeCurrent: number = window.performance.now();
+    private frameTimeLast: number = this.frameTimeCurrent;
+
+    constructor(canvas: HTMLCanvasElement){
         this.width = canvas.width;
         this.height = canvas.height;
         this.ctx = canvas.getContext('2d');
-
-        this.componentIDCount = 0;
-        this.components = [];
-        this.namedCompMap = new Map<string, Component>();
-
-        //Limit game fps
-        this.fpsLimit = 60;
-        this.frameExpectedMs = 1000 / this.fpsLimit;
-        this.frameTimeCurrent = window.performance.now();
-        this.frameTimeLast = this.frameTimeCurrent;
     }
 
     //Run component step logic
@@ -63,17 +55,16 @@ export class GameManager {
     }
 
     //Adds a new component to the game manager
-    componentAdd(component, name = ""){
+    componentAdd(component: Component, name = ""){
         this.components.push(component);
         if (name !== ""){
             this.namedCompMap.set(name, component);
         }
-        return component;
     }
 
     //Gets array of all components that are instances of X class
-    componentGetInstancesOf(componentClass){
-        const results = [];
+    componentGetInstancesOf(componentClass: typeof Component){
+        const results: Component[] = [];
         for (const comp of this.components){
             if (comp instanceof componentClass){
                 results.push(comp);
@@ -82,7 +73,7 @@ export class GameManager {
         return results;
     }
 
-    componentGetFirstInstanceOf(componentClass){
+    componentGetFirstInstanceOf(componentClass: typeof Component){
         for (const comp of this.components){
             if (comp instanceof componentClass){
                 return comp;
@@ -96,7 +87,7 @@ export class GameManager {
     }
 
     //Removes a component from the game manager
-    componentRemove(componentID){
+    componentRemove(componentID: number){
         if (this.components.length > 2){ //Binary search
             let minI = 0;
             let maxI = this.components.length - 1;

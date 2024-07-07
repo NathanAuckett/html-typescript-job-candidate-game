@@ -1,11 +1,9 @@
 import { Component } from "../engine/Component.js";
 export class ScoreKeeper extends Component {
-    score;
-    lives;
+    score = 0;
+    lives = 0;
     constructor(gameManager) {
         super(gameManager);
-        this.score = 0;
-        this.lives = 3;
     }
     draw() {
         this.ctx.fillStyle = "black";

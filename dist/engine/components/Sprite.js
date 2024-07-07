@@ -5,10 +5,8 @@ export class Sprite extends Component {
     yScale;
     visible;
     constructor(gameManager, imageResource, x, y, width = undefined, height = undefined, xScale = 1, yScale = 1, visible = true) {
-        super(gameManager);
+        super(gameManager, x, y);
         this.imageResource = imageResource;
-        this.x = x;
-        this.y = y;
         this.width = width;
         this.height = height;
         this.xScale = xScale;

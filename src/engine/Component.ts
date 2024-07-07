@@ -5,26 +5,28 @@ export class Component {
     readonly gameManager: GameManager;
     readonly id: number;
     readonly ctx: CanvasRenderingContext2D;
-    x: number;
-    y: number;
-    width: number;
-    height: number;
+    
+    x: number = 0;
+    y: number = 0;
+    width: number = 10;
+    height: number = 10;
+    drawDebug: boolean;
 
-    constructor(gameManager, name = "") {
+    constructor(gameManager: GameManager, x: number = this.x, y: number = this.y, name: string= "", drawDebug = false){
+        this.x = x;
+        this.y = y;
         this.gameManager = gameManager;
         this.componentName = name;
         this.id = gameManager.getNewID();
         this.ctx = gameManager.ctx;
-        this.x = 0;
-        this.y = 0;
-        this.width = 10;
-        this.height = 10;
-        
+        this.drawDebug = drawDebug;
     }
 
     step(){}
 
     draw(){
-        this.ctx.fillRect(this.x, this.y, this.width, this.height);
+        if (this.drawDebug){
+            this.ctx.fillRect(this.x, this.y, this.width, this.height);
+        }
     }
 }

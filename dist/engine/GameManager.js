@@ -1,26 +1,18 @@
 export class GameManager {
+    ctx;
     width;
     height;
-    ctx;
-    componentIDCount;
-    components;
-    fpsLimit;
-    frameExpectedMs;
-    frameTimeCurrent;
-    frameTimeLast;
-    namedCompMap;
+    componentIDCount = 0;
+    components = [];
+    namedCompMap = new Map();
+    fpsLimit = 60;
+    frameExpectedMs = 1000 / this.fpsLimit;
+    frameTimeCurrent = window.performance.now();
+    frameTimeLast = this.frameTimeCurrent;
     constructor(canvas) {
         this.width = canvas.width;
         this.height = canvas.height;
         this.ctx = canvas.getContext('2d');
-        this.componentIDCount = 0;
-        this.components = [];
-        this.namedCompMap = new Map();
-        //Limit game fps
-        this.fpsLimit = 60;
-        this.frameExpectedMs = 1000 / this.fpsLimit;
-        this.frameTimeCurrent = window.performance.now();
-        this.frameTimeLast = this.frameTimeCurrent;
     }
     //Run component step logic
     step() {
@@ -56,7 +48,6 @@ export class GameManager {
         if (name !== "") {
             this.namedCompMap.set(name, component);
         }
-        return component;
     }
     //Gets array of all components that are instances of X class
     componentGetInstancesOf(componentClass) {

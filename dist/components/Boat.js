@@ -4,37 +4,32 @@ import { Collider } from "../engine/components/Collider.js";
 import { Sprite } from "../engine/components/Sprite.js";
 export class Boat extends Component {
     sprite;
-    spriteElement;
-    spriteScale;
-    hspd;
-    vspd;
-    accel;
-    decel;
-    maxSpd;
+    spriteElement = document.getElementById("boat");
+    spriteScale = 0.5;
+    hspd = 0;
+    vspd = 0;
+    accel = 0.2;
+    decel = 0.1;
+    maxSpd = 10;
     inputManager;
     collider;
     constructor(gameManager, x, y) {
-        super(gameManager);
-        this.x = x;
-        this.y = y;
-        this.spriteElement = document.getElementById("boat");
-        this.spriteScale = 0.5;
+        super(gameManager, x, y);
         this.width = this.spriteElement.width * this.spriteScale;
         this.height = this.spriteElement.height * this.spriteScale - 40;
-        this.sprite = gameManager.componentAdd(new Sprite(gameManager, this.spriteElement, this.x, this.y, this.spriteElement.width, this.spriteElement.height, this.spriteScale, this.spriteScale));
-        this.hspd = 0;
-        this.vspd = 0;
-        this.accel = 0.2;
-        this.decel = 0.1;
-        this.maxSpd = 10;
-        this.inputManager = gameManager.componentAdd(new InputManager(gameManager));
-        this.collider = gameManager.componentAdd(new Collider(gameManager, this.x, this.y, this.spriteElement.width * this.spriteScale - 10, this.height));
+        this.sprite = new Sprite(gameManager, this.spriteElement, this.x, this.y, this.spriteElement.width, this.spriteElement.height, this.spriteScale, this.spriteScale);
+        this.inputManager = new InputManager(gameManager);
+        this.collider = new Collider(gameManager, this.x, this.y, this.spriteElement.width * this.spriteScale - 10, this.height);
+        gameManager.componentAdd(this.sprite);
+        gameManager.componentAdd(this.inputManager);
+        gameManager.componentAdd(this.collider);
     }
     step() {
         //Control
         const left = this.inputManager.check("ArrowLeft") == true ? 1 : 0;
         const right = this.inputManager.check("ArrowRight") == true ? 1 : 0;
         const dir = right - left;
+        //Acceleration
         this.hspd += this.accel * dir;
         if (this.hspd > this.maxSpd) {
             this.hspd = this.maxSpd;
@@ -64,6 +59,7 @@ export class Boat extends Component {
             this.x = this.gameManager.width - this.width;
             this.hspd = 0;
         }
+        //Update position
         this.x += this.hspd;
         this.y += this.vspd;
         //Collision check with parachuters
@@ -76,7 +72,7 @@ export class Boat extends Component {
                 scoreKeeper.score++;
             }
         }
+        //Position our sprite
         this.sprite.setPosition(this.x, this.y - 35);
     }
-    draw() { }
 }

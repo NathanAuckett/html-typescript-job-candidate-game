@@ -1,23 +1,20 @@
 import { Component } from "../Component.js";
+import { GameManager } from "../GameManager.js";
 
 export class Collider extends Component {
-    drawDebug: boolean;
-    
-    constructor(gameManager, x: number, y: number, width: number, height: number, drawDebug = false){
-        super(gameManager);
-        this.x = x;
-        this.y = y;
+    constructor(gameManager: GameManager, x: number, y: number, width: number, height: number, drawDebug = false){
+        super(gameManager, x, y);
         this.width = width;
         this.height = height;
         this.drawDebug = drawDebug;
     }
 
-    setPosition(x, y){
+    setPosition(x: number, y: number){
         this.x = x;
         this.y = y;
     }
 
-    collide(otherCollider: Collider, x = this.x, y = this.y){
+    collide(otherCollider: Collider, x: number = this.x, y: number = this.y){
         this.x = x;
         this.y = y;
         if (otherCollider instanceof Collider){

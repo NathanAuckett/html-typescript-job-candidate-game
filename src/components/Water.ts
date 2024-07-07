@@ -3,24 +3,24 @@ import { Sprite } from "../engine/components/Sprite.js";
 
 export class Water extends Component{
     sprite: Sprite;
-    spriteElement: HTMLImageElement;
+    spriteElement: HTMLImageElement = document.getElementById("water") as HTMLImageElement;
+    
     heightBoat: number;
     heightParachuterSink: number;
 
     constructor(gameManager){
         super(gameManager);
 
-        this.spriteElement = document.getElementById("water") as HTMLImageElement;
         this.width = this.spriteElement.width * 0.8;
         this.height = this.spriteElement.height * 0.3;
         
         this.heightBoat = gameManager.height - this.height / 2 - 20;
         this.heightParachuterSink = gameManager.height - this.height / 2;
-
-        this.x = 0;
+        
         this.y = gameManager.height - this.height;
 
-        this.sprite = gameManager.componentAdd(new Sprite(gameManager, this.spriteElement, this.x, this.y, this.spriteElement.width, this.spriteElement.height));
+        this.sprite = new Sprite(gameManager, this.spriteElement, this.x, this.y, this.spriteElement.width, this.spriteElement.height)
+        gameManager.componentAdd(this.sprite);
     }
 
     draw(){}
