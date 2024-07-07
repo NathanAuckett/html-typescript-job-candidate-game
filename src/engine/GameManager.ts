@@ -1,6 +1,7 @@
 import { Component } from "./Component.js";
 
 export class GameManager {
+    readonly canvas: HTMLCanvasElement;
     readonly ctx: CanvasRenderingContext2D;
     readonly width: number;
     readonly height: number;
@@ -15,6 +16,7 @@ export class GameManager {
     private frameTimeLast: number = this.frameTimeCurrent;
 
     constructor(canvas: HTMLCanvasElement){
+        this.canvas = canvas;
         this.width = canvas.width;
         this.height = canvas.height;
         this.ctx = canvas.getContext('2d');

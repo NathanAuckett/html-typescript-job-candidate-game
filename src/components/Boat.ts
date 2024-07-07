@@ -13,9 +13,11 @@ export class Boat extends Component {
 
     hspd: number = 0;
     vspd: number = 0;
-    readonly accel: number = 0.2;
-    readonly decel: number = 0.1;
+    readonly accel: number = 0.3;
+    readonly decel: number = 0.15;
     readonly maxSpd: number = 10;
+    mouseX: number = 0;
+    followMouse: boolean = false;
 
     inputManager: InputManager;
     collider: Collider;
@@ -46,30 +48,47 @@ export class Boat extends Component {
 
     step(){
         //Control
+        const mouseDown = this.inputManager.check("mouse0");
         const left = this.inputManager.check("ArrowLeft") == true ? 1 : 0;
         const right = this.inputManager.check("ArrowRight") == true ? 1 : 0;
-        const dir = right - left;
 
-        //Acceleration
-        this.hspd += this.accel * dir;
-        if (this.hspd > this.maxSpd){
-            this.hspd = this.maxSpd;
+        if (mouseDown){
+            this.followMouse = true;
+            this.mouseX = this.inputManager.getMouseMoveData().layerX;
         }
-        if (this.hspd < -this.maxSpd){
-            this.hspd = -this.maxSpd;
+        else if (left || right){
+            this.followMouse = false;
         }
+        
+        if (this.followMouse && Math.abs(this.mouseX - this.x - this.width / 2) > 0.1){
+            const dir = Math.sign(this.mouseX - this.x - this.width / 2);
+            this.hspd = Math.min(this.maxSpd, Math.abs(this.mouseX - this.x - this.width / 2) * 0.025) * dir;
+        }
+        else{
+            const dir = right - left;
 
-        //Deceleration
-        if (this.hspd > 0){
-            this.hspd -= this.decel;
-            if (this.hspd < 0){
-                this.hspd = 0;
+            //Acceleration
+            this.hspd += this.accel * dir;
+            if (this.hspd > this.maxSpd){
+                this.hspd = this.maxSpd;
             }
-        }
-        else if (this.hspd < 0){
-            this.hspd += this.decel;
+            if (this.hspd < -this.maxSpd){
+                this.hspd = -this.maxSpd;
+            }
+        
+
+            //Deceleration
             if (this.hspd > 0){
-                this.hspd = 0;
+                this.hspd -= this.decel;
+                if (this.hspd < 0){
+                    this.hspd = 0;
+                }
+            }
+            else if (this.hspd < 0){
+                this.hspd += this.decel;
+                if (this.hspd > 0){
+                    this.hspd = 0;
+                }
             }
         }
 

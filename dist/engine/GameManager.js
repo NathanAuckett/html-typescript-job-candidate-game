@@ -1,4 +1,5 @@
 export class GameManager {
+    canvas;
     ctx;
     width;
     height;
@@ -10,6 +11,7 @@ export class GameManager {
     frameTimeCurrent = window.performance.now();
     frameTimeLast = this.frameTimeCurrent;
     constructor(canvas) {
+        this.canvas = canvas;
         this.width = canvas.width;
         this.height = canvas.height;
         this.ctx = canvas.getContext('2d');
