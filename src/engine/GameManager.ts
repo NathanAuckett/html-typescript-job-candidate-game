@@ -1,15 +1,18 @@
 import { Component } from "./Component.js";
 
 export class GameManager {
+    //Canvas management
     readonly canvas: HTMLCanvasElement;
     readonly ctx: CanvasRenderingContext2D;
     readonly width: number;
     readonly height: number;
 
+    //Component tracking
     private componentIDCount: number = 0;
     readonly components: Component[] = [];
     private namedCompMap: Map<string, Component> = new Map<string, Component>();
 
+    //Frame rate limiting
     readonly fpsLimit: number = 60;
     private frameExpectedMs: number = 1000 / this.fpsLimit;
     private frameTimeCurrent: number = window.performance.now();

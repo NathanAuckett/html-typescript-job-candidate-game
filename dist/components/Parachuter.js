@@ -5,9 +5,7 @@ export class Parachuter extends Component {
     sprite;
     spriteElement = document.getElementById("parachuter");
     spriteScale = 0.5;
-    xStart;
     vspd = 0;
-    hspd = 0;
     grav = 0.05;
     fallSpdMin = 1;
     fallSpdMax = 2.5;
@@ -17,6 +15,7 @@ export class Parachuter extends Component {
     swayRangeMax = 64;
     swayRange = this.swayRangeMin + this.swayRangeMax - this.swayRangeMax * Math.random();
     sway = 360 * Math.random();
+    xStart;
     active = true;
     collider;
     constructor(gameManager, x, y) {
@@ -34,7 +33,6 @@ export class Parachuter extends Component {
         this.y = y;
         this.xStart = x;
         this.vspd = 0;
-        this.hspd = 0;
         this.sway = 360 * Math.random();
         this.swayRange = this.swayRangeMin + this.swayRangeMax - this.swayRangeMax * Math.random();
         this.maxFallSpd = this.fallSpdMin + this.fallSpdMax - this.fallSpdMax * Math.random();

@@ -8,12 +8,12 @@ import { GameManager } from "../engine/GameManager.js";
 import { GameOver } from "./GameOver.js";
 
 export class Boat extends Component {
-    sprite: Sprite;
-    spriteElement: HTMLImageElement = document.getElementById("boat") as HTMLImageElement;
-    spriteScale: number = 0.5;
+    private sprite: Sprite;
+    private spriteElement: HTMLImageElement = document.getElementById("boat") as HTMLImageElement;
+    private spriteScale: number = 0.5;
 
-    hspd: number = 0;
-    vspd: number = 0;
+    private hspd: number = 0;
+    private vspd: number = 0;
     readonly accel: number = 0.3;
     readonly decel: number = 0.15;
     readonly maxSpd: number = 10;
@@ -21,8 +21,8 @@ export class Boat extends Component {
     private followMouse: boolean = false;
     gameOver: boolean = false;
 
-    inputManager: InputManager;
-    collider: Collider;
+    private inputManager: InputManager;
+    private collider: Collider;
     
     constructor(gameManager: GameManager, x: number, y: number) {
         super(gameManager, x, y);

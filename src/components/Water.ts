@@ -2,8 +2,8 @@ import { Component } from "../engine/Component.js";
 import { Sprite } from "../engine/components/Sprite.js";
 
 export class Water extends Component{
-    sprite: Sprite;
-    spriteElement: HTMLImageElement = document.getElementById("water") as HTMLImageElement;
+    private sprite: Sprite;
+    private spriteElement: HTMLImageElement = document.getElementById("water") as HTMLImageElement;
     
     heightBoat: number;
     heightParachuterSink: number;

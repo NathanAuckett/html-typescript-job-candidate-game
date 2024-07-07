@@ -6,6 +6,7 @@ export class InputManager extends Component {
     mouseMoveData;
     constructor(gameManager) {
         super(gameManager);
+        //Keyboard
         window.addEventListener('keydown', (e) => {
             if (this.keys.indexOf(e.key) === -1) {
                 this.keys.push(e.key);
@@ -17,6 +18,7 @@ export class InputManager extends Component {
                 this.keys.splice(index, 1);
             }
         });
+        //Mouse
         window.addEventListener('mousedown', (e) => {
             const butStr = `mouse${e.button}`;
             if (this.keys.indexOf(butStr) === -1) {

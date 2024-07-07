@@ -10,12 +10,10 @@ import { Water } from "./Water.js";
 
 export class Parachuter extends Component{
     sprite: Sprite;
-    spriteElement: HTMLImageElement = document.getElementById("parachuter") as HTMLImageElement;
-    spriteScale: number = 0.5;
+    private spriteElement: HTMLImageElement = document.getElementById("parachuter") as HTMLImageElement;
+    private spriteScale: number = 0.5;
 
-    xStart: number;
-    vspd: number = 0;
-    hspd: number = 0;
+    private vspd: number = 0;
     readonly grav: number = 0.05;
     readonly fallSpdMin: number = 1;
     readonly fallSpdMax: number = 2.5;
@@ -26,6 +24,7 @@ export class Parachuter extends Component{
     readonly swayRangeMax: number = 64;
     swayRange: number = this.swayRangeMin + this.swayRangeMax - this.swayRangeMax * Math.random();
     sway: number = 360 * Math.random();
+    xStart: number;
 
     active: boolean = true;
     collider: Collider;
@@ -58,7 +57,6 @@ export class Parachuter extends Component{
         this.y = y;
         this.xStart = x;
         this.vspd = 0;
-        this.hspd = 0;
         this.sway = 360 * Math.random();
         this.swayRange = this.swayRangeMin + this.swayRangeMax - this.swayRangeMax * Math.random();
         this.maxFallSpd = this.fallSpdMin + this.fallSpdMax - this.fallSpdMax * Math.random();

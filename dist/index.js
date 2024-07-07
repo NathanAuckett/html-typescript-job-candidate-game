@@ -10,6 +10,7 @@ window.addEventListener("load", function () {
     canvas.width = 800;
     canvas.height = 500;
     const gameManager = new GameManager(canvas);
+    //Add game elements - order controls depth.
     const background = document.getElementById("background");
     gameManager.componentAdd(new Sprite(gameManager, background, 0, 0, background.width, background.height, canvas.width / background.width, canvas.height / background.height));
     const water = new Water(gameManager);

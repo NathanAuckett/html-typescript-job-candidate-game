@@ -1,11 +1,14 @@
 export class GameManager {
+    //Canvas management
     canvas;
     ctx;
     width;
     height;
+    //Component tracking
     componentIDCount = 0;
     components = [];
     namedCompMap = new Map();
+    //Frame rate limiting
     fpsLimit = 60;
     frameExpectedMs = 1000 / this.fpsLimit;
     frameTimeCurrent = window.performance.now();

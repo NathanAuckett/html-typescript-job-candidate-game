@@ -4,18 +4,18 @@ import { GameManager } from "../engine/GameManager.js";
 import { Parachuter } from "./Parachuter.js";
 
 export class Plane extends Component {
-    sprite: Sprite;
-    spriteElement: HTMLImageElement = document.getElementById("plane") as HTMLImageElement;
-    spriteScale: number = 0.5;
+    private sprite: Sprite;
+    private spriteElement: HTMLImageElement = document.getElementById("plane") as HTMLImageElement;
+    private spriteScale: number = 0.5;
 
-    spd: number = 2;
+    private spd: number = 2;
     gameOver: boolean = false;
 
-    parachutersMax: number = 5;
+    private parachutersMax: number = 5;
     parachutersPool: Parachuter[] = [];
     
-    dropFrequencyMin: number = 200;
-    dropFrequencyMax: number = 2000;
+    readonly dropFrequencyMin: number = 200;
+    readonly dropFrequencyMax: number = 2000;
     
     constructor(gameManager: GameManager, x: number, y: number){
         super(gameManager);

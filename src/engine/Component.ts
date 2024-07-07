@@ -12,7 +12,7 @@ export class Component {
     height: number = 10;
     drawDebug: boolean;
 
-    constructor(gameManager: GameManager, x: number = 0, y: number = 0, name: string= "", drawDebug = false){
+    constructor(gameManager: GameManager, x: number = 0, y: number = 0, name: string = "", drawDebug = false){
         this.x = x;
         this.y = y;
         this.gameManager = gameManager;
