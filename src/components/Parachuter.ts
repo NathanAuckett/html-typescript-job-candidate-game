@@ -7,7 +7,6 @@ import { Water } from "./Water.js";
 
 export class Parachuter extends Component{
     sprite: Sprite;
-    spriteElement: HTMLImageElement = document.getElementById("parachuter") as HTMLImageElement;
     spriteScale: number = 0.5;
 
     xStart: number;
@@ -15,7 +14,7 @@ export class Parachuter extends Component{
     hspd: number = 0;
     readonly grav: number = 0.05;
     readonly fallSpdMin: number = 1;
-    readonly fallSpdMax: number = 2.5;
+    readonly fallSpdMax: number = 2.4;
     maxFallSpd: number = this.fallSpdMin + this.fallSpdMax - this.fallSpdMax * Math.random();
 
     readonly swaySpd: number = 0.02;
@@ -31,11 +30,22 @@ export class Parachuter extends Component{
         super(gameManager, x, y);
         this.xStart = x;
         
-        this.width = this.spriteElement.width * this.spriteScale;
-        this.height = this.spriteElement.height * this.spriteScale;
+        const image = new Image();
+        image.src = "../../resources/parachutist.png";
+        this.width = image.width * this.spriteScale;
+        this.height = image.height * this.spriteScale;
 
-        this.sprite = new Sprite(gameManager, this.spriteElement, this.x, this.y, this.spriteElement.width, this.spriteElement.height, this.spriteScale, this.spriteScale);
-        this.collider = new Collider(gameManager, this.x, this.y, this.width, this.height);
+        this.sprite = new Sprite(
+            gameManager,
+            image,
+            this.x,
+            this.y,
+            image.width,
+            image.height,
+            this.spriteScale,
+            this.spriteScale
+        );
+        this.collider = new Collider(gameManager, this.x, this.y, this.width, this.height, false);
 
         gameManager.componentAdd(this.sprite);
         gameManager.componentAdd(this.collider);

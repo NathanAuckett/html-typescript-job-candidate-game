@@ -5,7 +5,6 @@ import { Parachuter } from "./Parachuter.js";
 
 export class Plane extends Component {
     sprite: Sprite;
-    spriteElement: HTMLImageElement = document.getElementById("plane") as HTMLImageElement;
     spriteScale: number = 0.5;
 
     spd: number = 2;
@@ -21,10 +20,21 @@ export class Plane extends Component {
         this.x = x;
         this.y = y;
         
-        this.width = this.spriteElement.width * this.spriteScale;
-        this.height = this.spriteElement.height * this.spriteScale - 40;
-
-        this.sprite = new Sprite(gameManager, this.spriteElement, this.x, this.y, this.spriteElement.width, this.spriteElement.height, this.spriteScale, this.spriteScale);
+        const image = new Image();
+        image.src = "../../resources/plane.png";
+        this.width = image.width * this.spriteScale;
+        this.height = image.height * this.spriteScale - 40;
+        
+        this.sprite = new Sprite(
+            gameManager,
+            image,
+            this.x,
+            this.y,
+            image.width,
+            image.height,
+            this.spriteScale,
+            this.spriteScale
+        );
         gameManager.componentAdd(this.sprite);
 
         setTimeout(() => {
