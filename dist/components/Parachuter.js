@@ -1,6 +1,10 @@
 import { Component } from "../engine/Component.js";
 import { Collider } from "../engine/components/Collider.js";
+import { Sprite } from "../engine/components/Sprite.js";
 export class Parachuter extends Component {
+    sprite;
+    spriteElement;
+    spriteScale;
     xStart;
     vspd;
     hspd;
@@ -18,10 +22,13 @@ export class Parachuter extends Component {
     constructor(gameManager, x, y) {
         super(gameManager);
         this.x = x;
-        this.xStart = x;
         this.y = y;
-        this.width = 8;
-        this.height = 32;
+        this.xStart = x;
+        this.spriteElement = document.getElementById("parachuter");
+        this.spriteScale = 0.5;
+        this.width = this.spriteElement.width * this.spriteScale;
+        this.height = this.spriteElement.height * this.spriteScale;
+        this.sprite = gameManager.componentAdd(new Sprite(gameManager, this.spriteElement, this.x, this.y, this.spriteElement.width, this.spriteElement.height, this.spriteScale, this.spriteScale));
         this.vspd = 0;
         this.hspd = 0;
         this.grav = 0.05;
@@ -46,6 +53,7 @@ export class Parachuter extends Component {
         this.swayRange = this.swayRangeMin + this.swayRangeMax - this.swayRangeMax * Math.random();
         this.maxFallSpd = this.fallSpdMin + this.fallSpdMax - this.fallSpdMax * Math.random();
         this.collider.setPosition(this.x, this.y);
+        this.sprite.visible = true;
         this.active = true;
     }
     step() {
@@ -62,17 +70,19 @@ export class Parachuter extends Component {
             this.y += this.vspd;
             this.collider.setPosition(this.x, this.y);
             const water = this.gameManager.componentGetNamed("water");
-            if (this.y + this.height * 0.5 > this.gameManager.height - water.height) {
+            if (this.y + this.height * 0.5 > water.heightParachuterSink) {
                 this.active = false;
+                this.sprite.visible = false;
                 const scoreKeeper = this.gameManager.componentGetNamed("scoreKeeper");
                 scoreKeeper.lives--;
             }
+            this.sprite.setPosition(this.x, this.y);
         }
     }
     draw() {
-        if (this.active) {
-            this.ctx.fillStyle = "green";
-            this.ctx.fillRect(this.x, this.y, this.width, this.height);
-        }
+        // if (this.active){
+        //     this.ctx.fillStyle = "green";
+        //     this.ctx.fillRect(this.x, this.y, this.width, this.height);
+        // }
     }
 }

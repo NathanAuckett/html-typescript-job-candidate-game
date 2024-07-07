@@ -1,8 +1,14 @@
 import { Component } from "../engine/Component.js";
 import { Collider } from "../engine/components/Collider.js";
+import { Sprite } from "../engine/components/Sprite.js";
 import { ScoreKeeper } from "./ScoreKeeper.js";
+import { Water } from "./Water.js";
 
 export class Parachuter extends Component{
+    sprite: Sprite;
+    spriteElement: HTMLImageElement;
+    spriteScale: number;
+
     xStart: number;
     vspd: number;
     hspd: number;
@@ -10,21 +16,27 @@ export class Parachuter extends Component{
     fallSpdMin: number;
     fallSpdMax: number;
     maxFallSpd: number;
+
     swayRangeMin: number;
     swayRangeMax: number;
     swayRange: number;
     sway: number;
     swaySpd: number;
+
     active: boolean;
     collider: Collider;
     
     constructor(gameManager, x: number, y: number){
         super(gameManager);
         this.x = x;
-        this.xStart = x;
         this.y = y;
-        this.width = 8;
-        this.height = 32;
+        this.xStart = x;
+        
+        this.spriteElement = document.getElementById("parachuter") as HTMLImageElement;
+        this.spriteScale = 0.5;
+        this.width = this.spriteElement.width * this.spriteScale;
+        this.height = this.spriteElement.height * this.spriteScale;
+        this.sprite = gameManager.componentAdd(new Sprite(gameManager, this.spriteElement, this.x, this.y, this.spriteElement.width, this.spriteElement.height, this.spriteScale, this.spriteScale));
 
         this.vspd = 0;
         this.hspd = 0;
@@ -55,6 +67,7 @@ export class Parachuter extends Component{
         this.swayRange = this.swayRangeMin + this.swayRangeMax - this.swayRangeMax * Math.random();
         this.maxFallSpd = this.fallSpdMin + this.fallSpdMax - this.fallSpdMax * Math.random();
         this.collider.setPosition(this.x, this.y);
+        this.sprite.visible = true;
         this.active = true;
     }
 
@@ -75,19 +88,22 @@ export class Parachuter extends Component{
 
             this.collider.setPosition(this.x, this.y);
 
-            const water = this.gameManager.componentGetNamed("water");
-            if (this.y + this.height * 0.5 > this.gameManager.height - water.height){
+            const water = this.gameManager.componentGetNamed("water") as Water;
+            if (this.y + this.height * 0.5 > water.heightParachuterSink){
                 this.active = false;
+                this.sprite.visible = false;
                 const scoreKeeper = this.gameManager.componentGetNamed("scoreKeeper") as ScoreKeeper;
                 scoreKeeper.lives --;
             }
+
+            this.sprite.setPosition(this.x, this.y);
         }
     }
 
     draw(){
-        if (this.active){
-            this.ctx.fillStyle = "green";
-            this.ctx.fillRect(this.x, this.y, this.width, this.height);
-        }
+        // if (this.active){
+        //     this.ctx.fillStyle = "green";
+        //     this.ctx.fillRect(this.x, this.y, this.width, this.height);
+        // }
     }
 }

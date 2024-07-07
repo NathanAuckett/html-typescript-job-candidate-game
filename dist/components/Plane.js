@@ -1,6 +1,10 @@
 import { Component } from "../engine/Component.js";
+import { Sprite } from "../engine/components/Sprite.js";
 import { Parachuter } from "./Parachuter.js";
 export class Plane extends Component {
+    sprite;
+    spriteElement;
+    spriteScale;
     spd;
     parachutersMax;
     parachutersPool;
@@ -11,15 +15,18 @@ export class Plane extends Component {
         super(gameManager);
         this.x = x;
         this.y = y;
-        this.width = 128;
-        this.height = 64;
+        this.spriteElement = document.getElementById("plane");
+        this.spriteScale = 0.5;
+        this.width = this.spriteElement.width * this.spriteScale;
+        this.height = this.spriteElement.height * this.spriteScale - 40;
+        this.sprite = gameManager.componentAdd(new Sprite(gameManager, this.spriteElement, this.x, this.y, this.spriteElement.width, this.spriteElement.height, this.spriteScale, this.spriteScale));
         this.spd = 2;
         this.parachutersMax = 10;
         this.parachutersPool = [];
         this.dropFrequencyMin = 200;
         this.dropFrequencyMax = 2500;
         this.dropLogic = function () {
-            if (this.x > this.width && this.x < this.gameManager.width - this.width) {
+            if (this.x > this.width * 2 && this.x < this.gameManager.width - this.width * 2) {
                 if (this.parachutersPool.length < this.parachutersMax) {
                     this.parachutersPool.push(gameManager.componentAdd(new Parachuter(gameManager, this.x + this.width / 2, this.y + this.height)));
                 }
@@ -46,9 +53,7 @@ export class Plane extends Component {
         if (this.x < -this.width) {
             this.x = this.gameManager.width + 200;
         }
+        this.sprite.setPosition(this.x, this.y);
     }
-    draw() {
-        this.ctx.fillStyle = "blue";
-        this.ctx.fillRect(this.x, this.y, this.width, this.height);
-    }
+    draw() { }
 }
