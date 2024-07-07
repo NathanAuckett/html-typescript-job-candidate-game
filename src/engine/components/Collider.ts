@@ -3,13 +3,13 @@ import { Component } from "../Component.js";
 export class Collider extends Component {
     drawDebug: boolean;
     
-    constructor(gameManager, x: number, y: number, width: number, height: number){
+    constructor(gameManager, x: number, y: number, width: number, height: number, drawDebug = false){
         super(gameManager);
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.drawDebug = false;
+        this.drawDebug = drawDebug;
     }
 
     setPosition(x, y){

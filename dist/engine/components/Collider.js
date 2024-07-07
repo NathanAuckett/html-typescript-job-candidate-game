@@ -1,13 +1,13 @@
 import { Component } from "../Component.js";
 export class Collider extends Component {
     drawDebug;
-    constructor(gameManager, x, y, width, height) {
+    constructor(gameManager, x, y, width, height, drawDebug = false) {
         super(gameManager);
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.drawDebug = false;
+        this.drawDebug = drawDebug;
     }
     setPosition(x, y) {
         this.x = x;
