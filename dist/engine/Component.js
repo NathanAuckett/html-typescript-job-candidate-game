@@ -1,4 +1,5 @@
 export class Component {
+    componentName;
     gameManager;
     id;
     ctx;
@@ -6,8 +7,9 @@ export class Component {
     y;
     width;
     height;
-    constructor(gameManager) {
+    constructor(gameManager, name = "") {
         this.gameManager = gameManager;
+        this.componentName = name;
         this.id = gameManager.getNewID();
         this.ctx = gameManager.ctx;
         this.x = 0;

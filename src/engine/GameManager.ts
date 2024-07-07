@@ -95,13 +95,13 @@ export class GameManager {
         return this.namedCompMap.get(name);
     }
 
-    //Removes a compnent from the game manager
+    //Removes a component from the game manager
     componentRemove(componentID){
         if (this.components.length > 2){ //Binary search
             let minI = 0;
             let maxI = this.components.length - 1;
-            let currentI
-            let currentID;
+            let currentI: number;
+            let currentID: number;
 
             while (minI <= maxI){
                 currentI = Math.floor((minI + maxI) / 2);
@@ -117,7 +117,13 @@ export class GameManager {
                     break;
                 }
             }
+
+            const componentName = this.components[currentI].componentName as string;
+            if (componentName){
+                this.namedCompMap.delete(componentName);
+            }
             this.components.splice(currentI, 1);
+
             return true
         }
         else if (this.components.length == 2){ //only 2 components, one or the other
