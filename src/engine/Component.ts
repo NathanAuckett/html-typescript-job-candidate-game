@@ -1,4 +1,14 @@
+import { GameManager } from "./GameManager.js";
+
 export class Component {
+    readonly gameManager: GameManager;
+    readonly id: number;
+    readonly ctx: CanvasRenderingContext2D;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+
     constructor(gameManager) {
         this.gameManager = gameManager;
         this.id = gameManager.getNewID();

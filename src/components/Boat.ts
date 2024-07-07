@@ -1,9 +1,19 @@
-import { Component } from "./Component.js";
-import { InputManager } from "./InputManager.js";
-import { Collider } from "./Collider.js";
-import { Parachuter } from "./Parachuter.js";
+import { Component } from "../engine/Component.js";
+import { InputManager } from "../engine/components/InputManager.js";
+import { Collider } from "../engine/components/Collider.js";
+import { Plane } from "./Plane.js";
+import { ScoreKeeper } from "./ScoreKeeper.js";
 
 export class Boat extends Component {
+    hspd: number;
+    vspd: number;
+    accel: number;
+    decel: number;
+    maxSpd: number;
+    grounded: boolean;
+    inputManager: InputManager;
+    collider: Collider;
+    
     constructor(gameManager, x, y) {
         super(gameManager);
         this.x = x;
@@ -13,18 +23,22 @@ export class Boat extends Component {
 
         this.hspd = 0;
         this.vspd = 0;
-        this.accel = 0.15;
+        this.accel = 0.2;
+        this.decel = 0.1;
         this.maxSpd = 10;
 
         this.grounded = false;
 
-        this.inputManager = new InputManager();
+        this.inputManager = gameManager.componentAdd(new InputManager(gameManager));
         this.collider = gameManager.componentAdd(new Collider(gameManager, this.x, this.y, this.width, this.height));
     }
 
     step(){
         //Control
-        const dir = this.inputManager.check("ArrowRight") - this.inputManager.check("ArrowLeft");
+        const left = this.inputManager.check("ArrowLeft") == true ? 1 : 0;
+        const right = this.inputManager.check("ArrowRight") == true ? 1 : 0;
+        const dir = right - left;
+
         this.hspd += this.accel * dir;
         if (this.hspd > this.maxSpd){
             this.hspd = this.maxSpd;
@@ -33,20 +47,19 @@ export class Boat extends Component {
             this.hspd = -this.maxSpd;
         }
         //Deceleration
-        if (dir == 0){
-            if (this.hspd > 0){
-                this.hspd -= this.accel;
-                if (this.hspd < 0){
-                    this.hspd = 0;
-                }
-            }
-            else if (this.hspd < 0){
-                this.hspd += this.accel;
-                if (this.hspd > 0){
-                    this.hspd = 0;
-                }
+        if (this.hspd > 0){
+            this.hspd -= this.decel;
+            if (this.hspd < 0){
+                this.hspd = 0;
             }
         }
+        else if (this.hspd < 0){
+            this.hspd += this.decel;
+            if (this.hspd > 0){
+                this.hspd = 0;
+            }
+        }
+        
 
         //Prevent leaving edges of canvas
         if (this.x + this.hspd < 0){
@@ -62,11 +75,12 @@ export class Boat extends Component {
         this.y += this.vspd;
 
         //Collision check with parachuters
-        const parachuters = this.gameManager.plane.parachutersPool;
-        for (const parachuter of parachuters){
+        const plane = this.gameManager.componentGetNamed("plane") as Plane;
+        for (const parachuter of plane.parachutersPool){
             if (parachuter.active && this.collider.collide(parachuter.collider, this.x, this.y)){
                 parachuter.active = false;
-                this.gameManager.scoreKeeper.score ++;
+                const scoreKeeper = this.gameManager.componentGetNamed("scoreKeeper") as ScoreKeeper;
+                scoreKeeper.score ++
             }
         }
     }

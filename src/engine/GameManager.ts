@@ -1,11 +1,25 @@
+import { Component } from "./Component.js";
+
 export class GameManager {
+    readonly width :number;
+    readonly height: number;
+    readonly ctx: CanvasRenderingContext2D;
+    private componentIDCount: number;
+    readonly components: Component[];
+    readonly fpsLimit: number;
+    private frameExpectedMs: number;
+    private frameTimeCurrent: number;
+    private frameTimeLast: number;
+    private namedCompMap: Map<string, Component>;
+
     constructor(canvas){
         this.width = canvas.width;
         this.height = canvas.height;
         this.ctx = canvas.getContext('2d');
 
-        this.componentIDCount = -1;
+        this.componentIDCount = 0;
         this.components = [];
+        this.namedCompMap = new Map<string, Component>();
 
         //Limit game fps
         this.fpsLimit = 60;
@@ -34,7 +48,7 @@ export class GameManager {
         const elapsedTime = this.frameTimeCurrent - this.frameTimeLast;
         
         if (elapsedTime >= this.frameExpectedMs){
-            this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+            this.ctx.clearRect(0, 0, this.width, this.height);
             this.step();
             this.draw();
             this.frameTimeLast = this.frameTimeCurrent - (elapsedTime % this.frameExpectedMs);
@@ -45,13 +59,15 @@ export class GameManager {
 
     //Gives a new id and increments id counter
     getNewID(){
-        this.componentIDCount ++;
-        return this.componentIDCount;
+        return ++this.componentIDCount;
     }
 
     //Adds a new component to the game manager
-    componentAdd(component){
+    componentAdd(component, name = ""){
         this.components.push(component);
+        if (name !== ""){
+            this.namedCompMap.set(name, component);
+        }
         return component;
     }
 
@@ -64,6 +80,19 @@ export class GameManager {
             }
         }
         return results;
+    }
+
+    componentGetFirstInstanceOf(componentClass){
+        for (const comp of this.components){
+            if (comp instanceof componentClass){
+                return comp;
+            }
+        }
+        return -1;
+    }
+
+    componentGetNamed(name: string){
+        return this.namedCompMap.get(name);
     }
 
     //Removes a compnent from the game manager

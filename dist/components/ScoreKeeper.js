@@ -1,14 +1,13 @@
-import { Component } from "./Component.js";
-
-export class ScoreKeeper extends Component{
-    constructor(gameManager){
+import { Component } from "../engine/Component.js";
+export class ScoreKeeper extends Component {
+    score;
+    lives;
+    constructor(gameManager) {
         super(gameManager);
-
         this.score = 0;
         this.lives = 3;
     }
-
-    draw(){
+    draw() {
         this.ctx.fillStyle = "black";
         this.gameManager.ctx.font = "50px Arial";
         this.gameManager.ctx.fillText(`Score: ${this.score}`, 10, 50);

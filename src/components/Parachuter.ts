@@ -1,10 +1,25 @@
-import { Component } from "./Component.js";
-import { Collider } from "./Collider.js";
+import { Component } from "../engine/Component.js";
+import { Collider } from "../engine/components/Collider.js";
+import { ScoreKeeper } from "./ScoreKeeper.js";
 
 export class Parachuter extends Component{
-    constructor(gameManager, x, y){
+    xStart: number;
+    vspd: number;
+    hspd: number;
+    grav: number;
+    fallSpdMin: number;
+    fallSpdMax: number;
+    maxFallSpd: number;
+    swayRangeMin: number;
+    swayRangeMax: number;
+    swayRange: number;
+    sway: number;
+    swaySpd: number;
+    active: boolean;
+    collider: Collider;
+    
+    constructor(gameManager, x: number, y: number){
         super(gameManager);
-        this.gameManager = gameManager;
         this.x = x;
         this.xStart = x;
         this.y = y;
@@ -60,9 +75,11 @@ export class Parachuter extends Component{
 
             this.collider.setPosition(this.x, this.y);
 
-            if (this.y + this.height * 0.5 > this.gameManager.height - this.gameManager.water.height){
-                this.gameManager.scoreKeeper.lives --;
+            const water = this.gameManager.componentGetNamed("water");
+            if (this.y + this.height * 0.5 > this.gameManager.height - water.height){
                 this.active = false;
+                const scoreKeeper = this.gameManager.componentGetNamed("scoreKeeper") as ScoreKeeper;
+                scoreKeeper.lives --;
             }
         }
     }

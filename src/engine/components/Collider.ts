@@ -1,9 +1,10 @@
-import { Component } from "./Component.js";
+import { Component } from "../Component.js";
 
 export class Collider extends Component {
-    constructor(gameManager, x, y, width, height){
+    drawDebug: boolean;
+    
+    constructor(gameManager, x: number, y: number, width: number, height: number){
         super(gameManager);
-        this.gameManager = gameManager;
         this.x = x;
         this.y = y;
         this.width = width;
@@ -16,7 +17,7 @@ export class Collider extends Component {
         this.y = y;
     }
 
-    collide(otherCollider, x = this.x, y = this.y){
+    collide(otherCollider: Collider, x = this.x, y = this.y){
         this.x = x;
         this.y = y;
         if (otherCollider instanceof Collider){
