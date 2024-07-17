@@ -1,10 +1,11 @@
-# Matific Candidate Game
+# HTML/TypeScript Job Candidate Game
 
-This project was created as a candidate project for a job at Matific.<br>
-It is my first time making a game in JavaScript/Typescript.
+This project was created as a job candidate project.<br>
+This was my first time making a game in JavaScript/Typescript and HTML5 Canvas.
 
 The game runs entirely through the HTML5 canvas.<br>
-No frameworks have been used.<br>
+No frameworks or game engines have been used.<br>
+All code is written by me.<br>
 
 The game uses a custom Component based system to manage game objects.
 All game objects are "Components" and function via the same framework.
